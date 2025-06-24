@@ -1,0 +1,96 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum VehicleType {
+  CAR
+  TRUCK
+}
+
+enum ShipmentStatus {
+  PENDING
+  IN_TRANSIT
+  DELIVERED
+  CANCELED
+}
+
+model Vehicle {
+  id           String      @id @default(uuid())
+  type         VehicleType
+  pricePerKm   Float
+  pricePerHour Float
+  capacityInKg Int
+  capacityInM3 Int
+  available    Boolean     @default(true)
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+}
+
+model Warehouse {
+  id        String   @id @default(uuid())
+  name      String
+  address   String
+  city      String
+  zipCode   String
+  country   String
+  latitude  Float
+  longitude Float
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations for shipments
+  departingShipments Shipment[] @relation("WarehouseDeparture")
+  arrivingShipments  Shipment[] @relation("WarehouseArrival")
+}
+
+model PickUpPoint {
+  id        String   @id @default(uuid())
+  name      String
+  address   String
+  city      String
+  zipCode   String
+  country   String
+  latitude  Float
+  longitude Float
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Shipment {
+  id                     String         @id @default(uuid())
+  status                 ShipmentStatus @default(PENDING)
+  
+  // Direct warehouse relationships (no more ShipmentRoute)
+  originWarehouseId      String
+  destinationWarehouseId String
+  originWarehouse        Warehouse      @relation("WarehouseDeparture", fields: [originWarehouseId], references: [id])
+  destinationWarehouse   Warehouse      @relation("WarehouseArrival", fields: [destinationWarehouseId], references: [id])
+  
+  createdAt              DateTime       @default(now())
+  updatedAt              DateTime       @updatedAt
+  volumeInM3             Float
+  weightInKg             Float
+  ShipmentItem ShipmentItem[]
+}
+
+model ShipmentItem {
+  id         String   @id @default(uuid())
+  shipmentId String
+  shipment   Shipment @relation(fields: [shipmentId], references: [id])
+  volumeInM3 Float
+  weightInKg Float
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}

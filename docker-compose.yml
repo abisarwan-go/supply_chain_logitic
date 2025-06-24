@@ -1,0 +1,14 @@
+services:
+  db:
+    image: postgres:latest
+    container_name: postgres_supply_chain_logistics_db
+    ports:
+      - 5433:5433
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+      POSTGRES_PORT: 5433
+    command: postgres -p 5433
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
