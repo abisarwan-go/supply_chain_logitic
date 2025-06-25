@@ -53,5 +53,16 @@ async function bootstrap() {
   } catch (error) {
     console.error('Error generating TypeScript client:', error);
   }
+
+  try {
+    execSync(
+      `npx openapi-zod-client ./openapi.json -o ${clientFrontEnd}/client.ts`,
+    );
+    console.log(
+      `Zod client generated successfully in ${clientFrontEnd}/client.ts`,
+    );
+  } catch (error) {
+    console.error('Error generating Zod client:', error);
+  }
 }
 bootstrap();
