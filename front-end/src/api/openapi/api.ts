@@ -1,8 +1,8 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * BizimRehber API
- * The BizimRehber API description
+ * Supply Chain - Logistics API
+ * The Supply Chain - Logistics API description
  *
  * The version of the OpenAPI document: 1.0
  * 
@@ -15,4 +15,5 @@
 
 
 export * from './api/app-api';
+export * from './api/operation-api';
 

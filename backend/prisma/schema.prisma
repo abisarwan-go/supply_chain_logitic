@@ -21,6 +21,7 @@ enum VehicleType {
 
 enum ShipmentStatus {
   PENDING
+  ASSIGNED
   IN_TRANSIT
   DELIVERED
   CANCELED
@@ -28,14 +29,29 @@ enum ShipmentStatus {
 
 model Vehicle {
   id           String      @id @default(uuid())
+  name         String
   type         VehicleType
   pricePerKm   Float
   pricePerHour Float
   capacityInKg Int
   capacityInM3 Int
+
+  shipments   Shipment[]
+  activeAssignment ActiveVehicleAssignment?
+
   available    Boolean     @default(true)
   createdAt    DateTime    @default(now())
   updatedAt    DateTime    @updatedAt
+}
+
+model ActiveVehicleAssignment {
+  id String @id @default(uuid())
+  vehicleId String @unique
+  shipmentId String @unique
+  
+  vehicle Vehicle @relation(fields: [vehicleId], references: [id])
+  shipment Shipment @relation(fields: [shipmentId], references: [id])
+  assignedAt DateTime @default(now())
 }
 
 model Warehouse {
@@ -47,12 +63,14 @@ model Warehouse {
   country   String
   latitude  Float
   longitude Float
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+
 
   // Relations for shipments
   departingShipments Shipment[] @relation("WarehouseDeparture")
   arrivingShipments  Shipment[] @relation("WarehouseArrival")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model PickUpPoint {
@@ -64,6 +82,7 @@ model PickUpPoint {
   country   String
   latitude  Float
   longitude Float
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -78,19 +97,28 @@ model Shipment {
   originWarehouse        Warehouse      @relation("WarehouseDeparture", fields: [originWarehouseId], references: [id])
   destinationWarehouse   Warehouse      @relation("WarehouseArrival", fields: [destinationWarehouseId], references: [id])
   
-  createdAt              DateTime       @default(now())
-  updatedAt              DateTime       @updatedAt
+  vehicleId              String?           
+  vehicle                Vehicle?        @relation(fields: [vehicleId], references: [id])
+
+  activeAssignment ActiveVehicleAssignment? // Fixed: single relation
+
   volumeInM3             Float
   weightInKg             Float
+
   ShipmentItem ShipmentItem[]
+
+  createdAt              DateTime       @default(now())
+  updatedAt              DateTime       @updatedAt
 }
 
 model ShipmentItem {
   id         String   @id @default(uuid())
   shipmentId String
   shipment   Shipment @relation(fields: [shipmentId], references: [id])
+
   volumeInM3 Float
   weightInKg Float
+  
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 }

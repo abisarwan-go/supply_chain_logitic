@@ -1,8 +1,8 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * BizimRehber API
- * The BizimRehber API description
+ * Supply Chain - Logistics API
+ * The Supply Chain - Logistics API description
  *
  * The version of the OpenAPI document: 1.0
  * 
@@ -71,7 +71,7 @@ export const AppApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getHello(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async getHello(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getHello(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AppApi.getHello']?.[localVarOperationServerIndex]?.url;
@@ -92,7 +92,7 @@ export const AppApiFactory = function (configuration?: Configuration, basePath?:
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getHello(options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        getHello(options?: RawAxiosRequestConfig): AxiosPromise<string> {
             return localVarFp.getHello(options).then((request) => request(axios, basePath));
         },
     };

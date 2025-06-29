@@ -10,10 +10,10 @@ async function bootstrap() {
 
   // Setup Swagger documentation
   const config = new DocumentBuilder()
-    .setTitle('BizimRehber API')
-    .setDescription('The BizimRehber API description')
+    .setTitle('Supply Chain - Logistics API')
+    .setDescription('The Supply Chain - Logistics API description')
     .setVersion('1.0')
-    .addTag('bizimrehber')
+    .addTag('supply-chain-logistics')
     .build();
 
   const document = SwaggerModule.createDocument(app, config, {
@@ -62,7 +62,7 @@ async function bootstrap() {
       `Zod client generated successfully in ${clientFrontEnd}/client.ts`,
     );
   } catch (error) {
-    console.error('Error generating Zod client:', error);
+    console.error('Error generating Zod-client:', error);
   }
 }
 bootstrap();

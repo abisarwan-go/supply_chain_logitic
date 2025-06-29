@@ -7,29 +7,349 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
           }
         },
         "tags": [
           "App"
         ]
       }
+    },
+    "/operation/all-pick-up-point": {
+      "get": {
+        "operationId": "allPickUpPoint",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AllPickUpPointResponseDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Operation"
+        ]
+      }
+    },
+    "/operation/create-pick-up-point": {
+      "post": {
+        "operationId": "createPickUpPoint",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePickUpPointRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreatePickUpPointResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Operation"
+        ]
+      }
+    },
+    "/operation/create-vehicle": {
+      "post": {
+        "operationId": "createVehicle",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateVehicleRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateVehicleResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Operation"
+        ]
+      }
+    },
+    "/operation/all-vehicles": {
+      "get": {
+        "operationId": "allVehicles",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AllVehiclesResponseDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Operation"
+        ]
+      }
     }
   },
   "info": {
-    "title": "BizimRehber API",
-    "description": "The BizimRehber API description",
+    "title": "Supply Chain - Logistics API",
+    "description": "The Supply Chain - Logistics API description",
     "version": "1.0",
     "contact": {}
   },
   "tags": [
     {
-      "name": "bizimrehber",
+      "name": "supply-chain-logistics",
       "description": ""
     }
   ],
   "servers": [],
   "components": {
-    "schemas": {}
+    "schemas": {
+      "AllPickUpPointResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "zipCode": {
+            "type": "string"
+          },
+          "country": {
+            "type": "string"
+          },
+          "latitude": {
+            "type": "number"
+          },
+          "longitude": {
+            "type": "number"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "address",
+          "city",
+          "zipCode",
+          "country",
+          "latitude",
+          "longitude",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "CreatePickUpPointRequestDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 3
+          },
+          "address": {
+            "type": "string",
+            "minLength": 3
+          },
+          "city": {
+            "type": "string",
+            "minLength": 3
+          },
+          "zipCode": {
+            "type": "string",
+            "minLength": 3
+          },
+          "country": {
+            "type": "string",
+            "minLength": 3
+          },
+          "latitude": {
+            "type": "number"
+          },
+          "longitude": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "name",
+          "address",
+          "city",
+          "zipCode",
+          "country",
+          "latitude",
+          "longitude"
+        ]
+      },
+      "CreatePickUpPointResponseDto": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "success": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "message",
+          "success"
+        ]
+      },
+      "CreateVehicleRequestDto": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "CAR",
+              "TRUCK"
+            ]
+          },
+          "name": {
+            "type": "string",
+            "minLength": 3
+          },
+          "pricePerKm": {
+            "type": "number",
+            "minimum": 0
+          },
+          "pricePerHour": {
+            "type": "number",
+            "minimum": 0
+          },
+          "capacityInKg": {
+            "type": "number",
+            "minimum": 0
+          },
+          "capacityInM3": {
+            "type": "number",
+            "minimum": 0
+          },
+          "available": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "type",
+          "name",
+          "pricePerKm",
+          "pricePerHour",
+          "capacityInKg",
+          "capacityInM3",
+          "available"
+        ]
+      },
+      "CreateVehicleResponseDto": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "success": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "message",
+          "success"
+        ]
+      },
+      "AllVehiclesResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "object"
+          },
+          "pricePerKm": {
+            "type": "number"
+          },
+          "pricePerHour": {
+            "type": "number"
+          },
+          "capacityInKg": {
+            "type": "number"
+          },
+          "capacityInM3": {
+            "type": "number"
+          },
+          "available": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "type",
+          "pricePerKm",
+          "pricePerHour",
+          "capacityInKg",
+          "capacityInM3",
+          "available"
+        ]
+      }
+    }
   }
 }
